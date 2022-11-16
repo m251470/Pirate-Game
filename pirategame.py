@@ -1,16 +1,62 @@
 #DJ's Pirate ship game
 import sys
 import pygame
+from background import grid
+from WASDpirateship import Ship1
+from Arrowspirateship import Ship2
+#Grid
+tile_size = 64
+window_width = 24 * tile_size
+window_height = 12 * tile_size
+#Load in all images
+water = pygame.image.load("images/rpgTile029.png")
+TopLeftIslandCorner1  = pygame.image.load("images/island1/tile_01.png")
+CenterTopIsland1 = pygame.image.load("images/island1/tile_02.png")
+TopRightIslandCorner1 = pygame.image.load("images/island1/tile_03.png")
+MiddleLeftIsland1 = pygame.image.load("images/island1/tile_17.png")
+MiddleMiddleIsland1 = pygame.image.load("images/island1/tile_18.png")
+MiddleRightIsland1 = pygame.image.load("images/island1/tile_19.png")
+BottomLeftCornerIsland1 = pygame.image.load("images/island1/tile_33.png")
+BottomCenterIsland1 = pygame.image.load("images/island1/tile_34.png")
+BottomRightCornerIsland1 = pygame.image.load("images/island1/tile_35.png")
+TopLeftIslandCorner2 = pygame.image.load("images/island2/tile_06.png")
+Center1TopIsland2 = pygame.image.load("images/island2/tile_07.png")
+Center2TopIsland2 = pygame.image.load("images/island2/tile_08.png")
+TopRightIslandCorner2 = pygame.image.load("images/island2/tile_09.png")
+TMiddleLeftIsland2 = pygame.image.load("images/island2/tile_22.png")
+TMiddleMiddleIsland2 = pygame.image.load("images/island2/tile_23.png")
+TMiddleMiddle2Island2 = pygame.image.load("images/island2/tile_24.png")
+TMiddleRightIsland2 = pygame.image.load("images/island2/tile_25.png")
+BMiddleLeftIsland2 = pygame.image.load("images/island2/tile_38.png")
+BMiddleMiddleIsland2 = pygame.image.load("images/island2/tile_39.png")
+BMiddleMiddle2Island2 = pygame.image.load("images/island2/tile_40.png")
+BMiddleRightIsland2 = pygame.image.load("images/island2/tile_41.png")
+BottomLeftCornerIsland2 = pygame.image.load("images/island2/tile_54.png")
+BottomCenterIsland2 = pygame.image.load("images/island2/tile_55.png")
+Bottom2CenterIsland2 = pygame.image.load("images/island2/tile_56.png")
+BottomRightCornerIsland2 = pygame.image.load("images/island2/tile_57.png")
+#Assign number values to images
+background = [water, TopLeftIslandCorner1, CenterTopIsland1, TopRightIslandCorner1, MiddleLeftIsland1, MiddleMiddleIsland1, MiddleRightIsland1, BottomLeftCornerIsland1, BottomCenterIsland1, BottomRightCornerIsland1, TopLeftIslandCorner2, Center1TopIsland2, Center2TopIsland2, TopRightIslandCorner2, TMiddleLeftIsland2, TMiddleMiddleIsland2, TMiddleMiddle2Island2, TMiddleRightIsland2, BMiddleLeftIsland2, BMiddleMiddleIsland2, BMiddleMiddle2Island2, BMiddleRightIsland2, BottomLeftCornerIsland2, BottomCenterIsland2, Bottom2CenterIsland2, BottomRightCornerIsland2]
+tile_rect = water.get_rect()
+
 
 class PirateGame:
     """The class for the Pirate Game"""
     def __init__(self):
         """Intialize Game"""
         pygame.init()
+        self.screen = pygame.display.set_mode((window_width,window_height))
+        pygame.display.set_caption("Pirate Game")
+        self.ship1 = Ship1(self)
 
-        self.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
-    def rungame(self):
+        self.ship2 = Ship2(self)
+    def run_game(self):
         """Main Loop"""
+        while True:
+            self._check_events()
+            self._update_screen()
+
+
 
     def _check_events(self):
         #Responds to events
@@ -24,13 +70,13 @@ class PirateGame:
 
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
-            self.ship.moving_right = True
+            self.ship2.moving_right = True
         elif event.key == pygame.K_LEFT:
-            self.ship.moving_left = True
+            self.ship2.moving_left = True
         elif event.key == pygame.K_UP:
-            self.ship.moving_up = True
+            self.ship2.moving_up = True
         elif event.key == pygame.K_DOWN:
-            self.ship.moving_down = True
+            self.ship2.moving_down = True
         elif event.key == pygame.K_e:
             self._fire_cannon1()
         elif event.key == pygame.K_RSHIFT:
@@ -39,19 +85,20 @@ class PirateGame:
             self._rotate_ship1()
         elif event.key == pygame.K_SLASH:
             self._rotate_ship2()
-        elif event.key == pygame.K_q:
+        elif event.key == pygame.K_ESCAPE:
             sys.exit()
 
 
 
-   def _update_screen(self):
-            # Redraw the screen during each pass thorugh the loop
-        self.screen.fill(self.settings.bg_color)
-        self.ship.blitme()
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
-            # make the most recently drawn screen visible
-        self.stars.draw(self.screen)
+    def _update_screen(self):
+    # Redraw the screen during each pass thorugh the loop
+        self.ship1.blitme()
+        self.ship2.blitme()
+        for r, gridlist in enumerate(grid):
+            for c, gridpart in enumerate(gridlist):
+                self.screen.blit(background[gridpart], (c * tile_size, r * tile_size))
+
+        # make the most recently drawn screen visible
         pygame.display.flip()
 
 
