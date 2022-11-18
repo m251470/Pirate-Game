@@ -1,5 +1,6 @@
 import pygame
 
+
 class Ship1:
     def __init__(self, ai_game):
         self.screen = ai_game.screen
@@ -23,20 +24,20 @@ class Ship1:
         self.moving_up = False
         self.moving_down = False
 
-        #Ship speed
-        self.ship_speed = 1.5
+
     def update(self):
         """Update the ship's position based on movement flag."""
         #Update rect object from self.x
         self.rect.x = self.x
         self.rect.y = self.y
         if self.moving_right and self.rect.right < self.screen_rect.right:
-            self.x += self.ship_speed
+            self.x += 20
         if self.moving_left and self.rect.left > 0:
-            self.x -= self.ship_speed
+            self.x -= 1.5
         if self.moving_up and self.rect.top > 0:
-            self.y -= self.ship_speed
+            self.y -= 1.5
         if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
-            self.y += self.ship_speed
+            self.y += 1.5
+
     def blitme(self):
         self.screen.blit(self.image, self.rect)

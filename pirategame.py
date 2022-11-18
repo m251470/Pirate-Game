@@ -6,7 +6,7 @@ from WASDpirateship import Ship1
 from Arrowspirateship import Ship2
 #Grid
 tile_size = 64
-window_width = 24 * tile_size
+window_width = 20 * tile_size
 window_height = 12 * tile_size
 #Load in all images
 water = pygame.image.load("images/rpgTile029.png")
@@ -54,7 +54,8 @@ class PirateGame:
         """Main Loop"""
         while True:
             self._check_events()
-            self._update_screen()
+            self.update_screen()
+
 
 
 
@@ -77,31 +78,31 @@ class PirateGame:
             self.ship2.moving_up = True
         elif event.key == pygame.K_DOWN:
             self.ship2.moving_down = True
-        elif event.key == pygame.K_e:
-            self._fire_cannon1()
-        elif event.key == pygame.K_RSHIFT:
-            self._fire_cannon2()
-        elif event.key == pygame.K_q:
-            self._rotate_ship1()
-        elif event.key == pygame.K_SLASH:
-            self._rotate_ship2()
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
+    def _check_keyup_events(self, event):
+            if event.key == pygame.K_RIGHT:
+                self.ship2.moving_right = False
+            elif event.key == pygame.K_LEFT:
+                self.ship2.moving_left = False
+            elif event.key == pygame.K_UP:
+                self.ship2.moving_up = False
+            elif event.key == pygame.K_DOWN:
+                self.ship2.moving_down = False
 
 
 
-    def _update_screen(self):
     # Redraw the screen during each pass thorugh the loop
-        self.ship1.blitme()
-        self.ship2.blitme()
+    def draw_background(self):
         for r, gridlist in enumerate(grid):
             for c, gridpart in enumerate(gridlist):
                 self.screen.blit(background[gridpart], (c * tile_size, r * tile_size))
-
+    def update_screen(self):
+        self.draw_background()
+        self.ship2.blitme()
+        self.ship1.blitme()
         # make the most recently drawn screen visible
         pygame.display.flip()
-
-
 
 if __name__ == '__main__':
     # run game
