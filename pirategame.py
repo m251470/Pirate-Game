@@ -50,11 +50,13 @@ class PirateGame:
         self.ship1 = Ship1(self)
 
         self.ship2 = Ship2(self)
+        back = self.draw_background((window_width,window_height))
     def run_game(self):
         """Main Loop"""
         while True:
             self._check_events()
             self.update_screen()
+
 
 
 
@@ -78,6 +80,10 @@ class PirateGame:
             self.ship2.moving_up = True
         elif event.key == pygame.K_DOWN:
             self.ship2.moving_down = True
+        elif event.key == pygame.K_q:
+            self.ship1.rotating1 = True
+        elif event.key == pygame.K_SLASH:
+            self.ship2.rotating2 = True
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
     def _check_keyup_events(self, event):
@@ -89,16 +95,22 @@ class PirateGame:
                 self.ship2.moving_up = False
             elif event.key == pygame.K_DOWN:
                 self.ship2.moving_down = False
+            elif event.key == pygame.K_q:
+                self.ship1.rotating1 = False
+            elif event.key == pygame.K_SLASH:
+                self.ship2.rotating2 = False
 
 
 
     # Redraw the screen during each pass thorugh the loop
-    def draw_background(self):
+    def draw_background(self, background_size):
+        self.back = pygame.Surface(background_size)
         for r, gridlist in enumerate(grid):
             for c, gridpart in enumerate(gridlist):
-                self.screen.blit(background[gridpart], (c * tile_size, r * tile_size))
+                self.back.blit(background[gridpart], (c * tile_size, r * tile_size))
+        return self.back
     def update_screen(self):
-        self.draw_background()
+        self.draw_background(self.back)
         self.ship2.blitme()
         self.ship1.blitme()
         # make the most recently drawn screen visible
