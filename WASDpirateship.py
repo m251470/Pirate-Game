@@ -51,7 +51,7 @@ class Ship1(Sprite):
             self.y -= self.speed * math.cos(theta_rads)
         if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
             self.y += self.speed * math.cos(theta_rads)
-        self.theta -= self.omega
+        self.theta -= self.delta
 
 
 

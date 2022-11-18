@@ -104,6 +104,7 @@ class PirateGame:
 
     # Redraw the screen during each pass thorugh the loop
     def draw_background(self, background_size):
+        background_size = (window_width,window_height)
         self.back = pygame.Surface(background_size)
         for r, gridlist in enumerate(grid):
             for c, gridpart in enumerate(gridlist):
