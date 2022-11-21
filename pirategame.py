@@ -57,10 +57,6 @@ class PirateGame:
             self._check_events()
             self.update_screen()
 
-
-
-
-
     def _check_events(self):
         #Responds to events
         for event in pygame.event.get():
@@ -68,37 +64,26 @@ class PirateGame:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
-            elif event.type == pygame.KEYUP:
-                self._check_keyup_events(event)
 
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
-            self.ship2.moving_right = True
+            self.ship2.change_omega(1)
         elif event.key == pygame.K_LEFT:
-            self.ship2.moving_left = True
+            self.ship2.change_omega(-1)
         elif event.key == pygame.K_UP:
-            self.ship2.moving_up = True
+            self.ship2.change_speed(-1)
         elif event.key == pygame.K_DOWN:
-            self.ship2.moving_down = True
-        elif event.key == pygame.K_q:
-            self.ship1.rotating1 = True
-        elif event.key == pygame.K_SLASH:
-            self.ship2.rotating2 = True
+            self.ship2.change_speed(1)
+        elif event.key == pygame.K_d:
+            self.ship1.change_omega(1)
+        elif event.key == pygame.K_a:
+            self.ship1.change_omega(-1)
+        elif event.key == pygame.K_w:
+            self.ship1.change_speed(-1)
+        elif event.key == pygame.K_s:
+            self.ship1.change_speed(1)
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
-    def _check_keyup_events(self, event):
-            if event.key == pygame.K_RIGHT:
-                self.ship2.moving_right = False
-            elif event.key == pygame.K_LEFT:
-                self.ship2.moving_left = False
-            elif event.key == pygame.K_UP:
-                self.ship2.moving_up = False
-            elif event.key == pygame.K_DOWN:
-                self.ship2.moving_down = False
-            elif event.key == pygame.K_q:
-                self.ship1.rotating1 = False
-            elif event.key == pygame.K_SLASH:
-                self.ship2.rotating2 = False
 
 
 
@@ -111,9 +96,11 @@ class PirateGame:
                 self.back.blit(background[gridpart], (c * tile_size, r * tile_size))
         return self.back
     def update_screen(self):
+        self.draw_background(self.back)
+        self.ship2.update()
+        self.ship1.update()
         self.ship2.blitme()
         self.ship1.blitme()
-        self.draw_background(self.back)
         # make the most recently drawn screen visible
         pygame.display.flip()
 
