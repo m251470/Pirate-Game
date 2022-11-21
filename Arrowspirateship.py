@@ -31,6 +31,8 @@ class Ship2(Sprite):
         self.speed = 0
         self.theta = 0
         self.delta = 0
+    def move_location(self, location):
+        self.rect.center = location
 
     def change_speed(self, omega = 1):
         self.delta = 0
@@ -62,5 +64,5 @@ class Ship2(Sprite):
         self.rect.center = (self.x,self.y)
         center = self.rect.center
         rotating = pygame.transform.rotate(self.image, self.theta)
-        rot = rotating.get_rect(center)
+        rot = rotating.get_rect(center = self.rect.center)
         self.screen.blit(rotating, rot)

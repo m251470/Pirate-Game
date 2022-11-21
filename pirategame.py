@@ -6,7 +6,7 @@ from WASDpirateship import Ship1
 from Arrowspirateship import Ship2
 #Grid
 tile_size = 64
-window_width = 20 * tile_size
+window_width = 18 * tile_size
 window_height = 12 * tile_size
 #Load in all images
 water = pygame.image.load("images/rpgTile029.png")
@@ -111,9 +111,9 @@ class PirateGame:
                 self.back.blit(background[gridpart], (c * tile_size, r * tile_size))
         return self.back
     def update_screen(self):
-        self.draw_background(self.back)
         self.ship2.blitme()
         self.ship1.blitme()
+        self.draw_background(self.back)
         # make the most recently drawn screen visible
         pygame.display.flip()
 
