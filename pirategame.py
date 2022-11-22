@@ -4,6 +4,9 @@ import pygame
 from background import grid
 from WASDpirateship import Ship1
 from Arrowspirateship import Ship2
+from CannonWASD import CannonBall1
+from CannonArrows import CannonBall2
+
 #Grid
 tile_size = 64
 window_width = 18 * tile_size
@@ -51,12 +54,16 @@ class PirateGame:
         self.ship2 = Ship2(self)
 
         self.bg = self.draw_background((window_width,window_height))
-
+        self.cannonball1 = pygame.sprite.Group()
+        self.cannonball2 = pygame.sprite.Group()
+        self._update_ca()
     def run_game(self):
         """Main Loop"""
         while True:
             self._check_events()
             self.update_screen()
+            self.ship2.update()
+            self.ship1.update()
 
     def _check_events(self):
         #Responds to events
@@ -68,21 +75,25 @@ class PirateGame:
 
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
-            self.ship2.change_omega(1)
+            self.ship2.change_omega(.05)
         elif event.key == pygame.K_LEFT:
-            self.ship2.change_omega(-1)
+            self.ship2.change_omega(-.05)
         elif event.key == pygame.K_UP:
-            self.ship2.change_speed(-.1)
+            self.ship2.change_speed(-.05)
         elif event.key == pygame.K_DOWN:
-            self.ship2.change_speed(.1)
+            self.ship2.change_speed(.05)
         elif event.key == pygame.K_d:
-            self.ship1.change_omega(1)
+            self.ship1.change_omega(.05)
         elif event.key == pygame.K_a:
-            self.ship1.change_omega(-1)
+            self.ship1.change_omega(-.05)
         elif event.key == pygame.K_w:
             self.ship1.change_speed(-.1)
         elif event.key == pygame.K_s:
             self.ship1.change_speed(.1)
+        elif event.key == pygame.K_LSHIFT:
+            self.fire_cannon1()
+        elif event.key == pygame.K_q:
+            self.fire_cannon2()
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
 
@@ -95,6 +106,30 @@ class PirateGame:
             for c, gridpart in enumerate(gridlist):
                 self.bg.blit(background[gridpart], (c * tile_size, r * tile_size))
         return self.bg
+    def _fire_cannon1(self):
+        """Create a new cannon and add it to the rest"""
+        new_ball = CannonBall1(self)
+        self.cannonball1.add(new_ball)
+    def _fire_cannon2(self):
+        """Create a new cannon and add it to the rest"""
+        new_ball = CannonBall1(self)
+        self.cannonball1.add(new_ball)
+
+    def _update_cannon1(self):
+        """Update position of bullets and get rid of old ones"""
+        self.cannonball1.update()
+        #Rid of old bullets
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+        self._check_bullet_alien_collisions()
+    def _update_cannon2(self):
+        self.cannonball1.update()
+        #Rid of old bullets
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+        self._check_bullet_alien_collisions()
     def update_screen(self):
         self.screen.blit(self.bg, self.bg.get_rect())
         self.ship1.update()

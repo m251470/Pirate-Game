@@ -17,8 +17,8 @@ class Ship2(Sprite):
         self.rect.midright = self.screen_rect.midright
 
         # Store values for ship's position
-        self.x = float(self.rect.x)
-        self.y = float(self.rect.y)
+        self.x = 1000
+        self.y = 400
 
 
         #Rotating
@@ -41,6 +41,7 @@ class Ship2(Sprite):
         self.theta_rads = math.pi/180*self.theta
         self.y += self.speed * math.cos(self.theta_rads)
         self.x += self.speed * math.sin(self.theta_rads)
+        self.theta += self.omega
 
 
     def blitme(self):

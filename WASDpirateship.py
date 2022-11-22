@@ -16,8 +16,8 @@ class Ship1(Sprite):
         self.rect.center = self.screen_rect.center
 
         #Store values for ship's position
-        self.x = float(self.rect.x)
-        self.y = float(self.rect.y)
+        self.x = 100
+        self.y = 400
 
 
 
@@ -42,6 +42,7 @@ class Ship1(Sprite):
         self.theta_rads = math.pi/180*self.theta
         self.y += self.speed * math.cos(self.theta_rads)
         self.x += self.speed * math.sin(self.theta_rads)
+        self.theta -= self.omega
 
 
 
