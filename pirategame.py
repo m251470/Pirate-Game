@@ -4,8 +4,10 @@ import pygame
 from background import grid
 from WASDpirateship import Ship1
 from Arrowspirateship import Ship2
-from CannonWASD import CannonBall1
-from CannonArrows import CannonBall2
+from cannonballs1 import CannonBall1
+from cannonballs2 import CannonBall2
+from island1 import Island
+from time import sleep
 
 #Grid
 tile_size = 64
@@ -54,16 +56,18 @@ class PirateGame:
         self.ship2 = Ship2(self)
 
         self.bg = self.draw_background((window_width,window_height))
-        self.cannonball1 = pygame.sprite.Group()
-        self.cannonball2 = pygame.sprite.Group()
-        self._update_ca()
+        self.cannonballs1 = pygame.sprite.Group()
+        self.cannonballs2 = pygame.sprite.Group()
+        self.islands = pygame.sprite.Group()
+        self.clock = pygame.time.Clock()
+
+
     def run_game(self):
         """Main Loop"""
         while True:
             self._check_events()
             self.update_screen()
-            self.ship2.update()
-            self.ship1.update()
+
 
     def _check_events(self):
         #Responds to events
@@ -75,13 +79,13 @@ class PirateGame:
 
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
-            self.ship2.change_omega(.05)
-        elif event.key == pygame.K_LEFT:
             self.ship2.change_omega(-.05)
+        elif event.key == pygame.K_LEFT:
+            self.ship2.change_omega(.05)
         elif event.key == pygame.K_UP:
-            self.ship2.change_speed(-.05)
+            self.ship2.change_speed(-.1)
         elif event.key == pygame.K_DOWN:
-            self.ship2.change_speed(.05)
+            self.ship2.change_speed(.1)
         elif event.key == pygame.K_d:
             self.ship1.change_omega(.05)
         elif event.key == pygame.K_a:
@@ -90,10 +94,12 @@ class PirateGame:
             self.ship1.change_speed(-.1)
         elif event.key == pygame.K_s:
             self.ship1.change_speed(.1)
-        elif event.key == pygame.K_LSHIFT:
-            self.fire_cannon1()
         elif event.key == pygame.K_q:
-            self.fire_cannon2()
+            self.cannonballs1.add(self.ship1.shoot())
+        elif event.key == pygame.K_RSHIFT:
+            self.cannonballs2.add(self.ship2.shoot())
+        elif event.key == pygame.K_SPACE:
+            self.island_create()
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
 
@@ -106,38 +112,39 @@ class PirateGame:
             for c, gridpart in enumerate(gridlist):
                 self.bg.blit(background[gridpart], (c * tile_size, r * tile_size))
         return self.bg
-    def _fire_cannon1(self):
-        """Create a new cannon and add it to the rest"""
-        new_ball = CannonBall1(self)
-        self.cannonball1.add(new_ball)
-    def _fire_cannon2(self):
-        """Create a new cannon and add it to the rest"""
-        new_ball = CannonBall1(self)
-        self.cannonball1.add(new_ball)
+    def island_create(self):
+        for x in range(0,window_width,tile_size):
+            for y in (0,window_height):
+                island = Island((x,y))
+                self.islands.add(island)
 
-    def _update_cannon1(self):
-        """Update position of bullets and get rid of old ones"""
-        self.cannonball1.update()
-        #Rid of old bullets
-        for bullet in self.bullets.copy():
-            if bullet.rect.bottom <= 0:
-                self.bullets.remove(bullet)
-        self._check_bullet_alien_collisions()
-    def _update_cannon2(self):
-        self.cannonball1.update()
-        #Rid of old bullets
-        for bullet in self.bullets.copy():
-            if bullet.rect.bottom <= 0:
-                self.bullets.remove(bullet)
-        self._check_bullet_alien_collisions()
+    #def _check_cannonball_ship_collisions(self):
+        # Check for cannonballs that hit ships and get rid of cannonballs and change ship if so
+        #collisions1 = pygame.sprite.groupcollide(self.cannonballs1, self.ship2, True, True)
+        #collisions1 = pygame.sprite.groupcollide(self.cannonballs2, self.ship1, True, True)
+        #if not self.ship2:
+            # Destroy existing bullets and create new fleet
+            #self.cannonballs1.empty()
+        #elif not self.ship1:
+           # self.cannonballs2.empty()
+
     def update_screen(self):
         self.screen.blit(self.bg, self.bg.get_rect())
-        self.ship1.update()
-        self.ship2.update()
-        self.ship2.blitme()
-        self.ship1.blitme()
+        self.ship1.update(self.islands)
+        self.ship2.update(self.islands)
+        self.ship1.update(self.islands)
+        self.ship2.update(self.islands)
+        pygame.sprite.Group.draw(self.islands, self.screen)
+        self.ship2.blitme(self.screen)
+        self.ship1.blitme(self.screen)
+        self.cannonballs1.update()
+        self.cannonballs2.update()
+        pygame.sprite.Group.draw(self.cannonballs1,self.screen)
+        pygame.sprite.Group.draw(self.cannonballs2, self.screen)
+
         # make the most recently drawn screen visible
         pygame.display.flip()
+        self.clock.tick(1000)
 
 if __name__ == '__main__':
     # run game

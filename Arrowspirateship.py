@@ -1,6 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
 import math
+from cannonballs2 import CannonBall2
 
 
 class Ship2(Sprite):
@@ -35,17 +36,25 @@ class Ship2(Sprite):
     def change_omega(self, delta = 1):
         self.speed = 0
         self.omega += delta
+    def shoot(self):
+        return CannonBall2(self.x, self.y, self.theta)
 
-    def update(self):
+
+    def update(self,island_group):
         """Update the ship's position based on movement flag."""
         self.theta_rads = math.pi/180*self.theta
-        self.y += self.speed * math.cos(self.theta_rads)
-        self.x += self.speed * math.sin(self.theta_rads)
-        self.theta += self.omega
+        new_y= self.y + self.speed * math.cos(self.theta_rads)
+        new_x = self.x + self.speed * math.sin(self.theta_rads)
+        self.theta -= self.omega
+        old_rect = self.rect
+        if(not pygame.sprite.spritecollide(self,island_group,False)):
+            self.y = new_y
+            self.x = new_x
+        else:
+            self.rect = old_rect
 
 
-    def blitme(self):
-        self.update()
+    def blitme(self,screen):
         intX = int(self.x)
         inty = int(self.y)
         self.rect.center = (intX,inty)
