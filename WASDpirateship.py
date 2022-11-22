@@ -13,7 +13,7 @@ class Ship1(Sprite):
         self.rect = self.image.get_rect()
 
         #Ship's starting positions on left side
-        self.rect.midleft = self.screen_rect.midleft
+        self.rect.center = self.screen_rect.center
 
         #Store values for ship's position
         self.x = float(self.rect.x)

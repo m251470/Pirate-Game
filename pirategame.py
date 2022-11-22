@@ -48,9 +48,10 @@ class PirateGame:
         self.screen = pygame.display.set_mode((window_width,window_height))
         pygame.display.set_caption("Pirate Game")
         self.ship1 = Ship1(self)
-
         self.ship2 = Ship2(self)
-        back = self.draw_background((window_width,window_height))
+
+        self.bg = self.draw_background((window_width,window_height))
+
     def run_game(self):
         """Main Loop"""
         while True:
@@ -71,34 +72,33 @@ class PirateGame:
         elif event.key == pygame.K_LEFT:
             self.ship2.change_omega(-1)
         elif event.key == pygame.K_UP:
-            self.ship2.change_speed(-1)
+            self.ship2.change_speed(-.1)
         elif event.key == pygame.K_DOWN:
-            self.ship2.change_speed(1)
+            self.ship2.change_speed(.1)
         elif event.key == pygame.K_d:
             self.ship1.change_omega(1)
         elif event.key == pygame.K_a:
             self.ship1.change_omega(-1)
         elif event.key == pygame.K_w:
-            self.ship1.change_speed(-1)
+            self.ship1.change_speed(-.1)
         elif event.key == pygame.K_s:
-            self.ship1.change_speed(1)
+            self.ship1.change_speed(.1)
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
 
 
 
     # Redraw the screen during each pass thorugh the loop
-    def draw_background(self, background_size):
-        background_size = (window_width,window_height)
-        self.back = pygame.Surface(background_size)
+    def draw_background(self, bg_size):
+        self.bg = pygame.Surface(bg_size)
         for r, gridlist in enumerate(grid):
             for c, gridpart in enumerate(gridlist):
-                self.back.blit(background[gridpart], (c * tile_size, r * tile_size))
-        return self.back
+                self.bg.blit(background[gridpart], (c * tile_size, r * tile_size))
+        return self.bg
     def update_screen(self):
-        self.draw_background(self.back)
-        self.ship2.update()
+        self.screen.blit(self.bg, self.bg.get_rect())
         self.ship1.update()
+        self.ship2.update()
         self.ship2.blitme()
         self.ship1.blitme()
         # make the most recently drawn screen visible
