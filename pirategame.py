@@ -55,13 +55,15 @@ class PirateGame:
         pygame.display.set_caption("Pirate Game")
         self.ship1 = Ship1(self)
         self.ship2 = Ship2(self)
-
+        self.ship_group1 = pygame.sprite.Group()
+        self.ship_group2 = pygame.sprite.Group()
+        self.ship_group1.add(self.ship1)
+        self.ship_group2.add(self.ship2)
         self.bg = self.draw_background((window_width,window_height))
         self.cannonballs1 = pygame.sprite.Group()
         self.cannonballs2 = pygame.sprite.Group()
         self.islands = pygame.sprite.Group()
         self.clock = pygame.time.Clock()
-        self.intro = (0,50,250)
 
 
     def run_game(self):
@@ -70,22 +72,8 @@ class PirateGame:
             self._check_events()
             self.update_screen()
 
-    def game_intro(self):
-        intro = True
-        while intro:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
-            self.screen.fill(self.intro)
-            largeText = pygame.font.Font('freesansbold.ttf', 115)
-            TextSurf, TextRect = self.text_objects("Press Space to Start", largeText)
-            TextRect.center = ((window_width / 2), (window_height / 2))
-            self.screen.blit(TextSurf, TextRect)
 
 
-    def text_objects(self, text, font):
-        textSurface = font.render(text, True, self.intro)
-        return textSurface, textSurface.get_rect()
     def _check_events(self):
         #Responds to events
         for event in pygame.event.get():
@@ -157,12 +145,9 @@ class PirateGame:
             self.cannonballs2.empty()
 
     def update_screen(self):
-        self.game_intro()
         self.screen.blit(self.bg, self.bg.get_rect())
-        self.ship1.update(self.islands)
-        self.ship2.update(self.islands)
-        self.ship1.update(self.islands)
-        self.ship2.update(self.islands)
+        self.ship1.update(self.islands, self.cannonballs2, self.ship_group1)
+        self.ship2.update(self.islands, self.cannonballs1, self.ship_group2)
         pygame.sprite.Group.draw(self.islands, self.screen)
         self.ship2.blitme(self.screen)
         self.ship1.blitme(self.screen)

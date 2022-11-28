@@ -6,6 +6,7 @@ from cannonballs2 import CannonBall2
 
 class Ship2(Sprite):
     def __init__(self, ai_game):
+        pygame.sprite.Sprite.__init__(self)
         self.screen = ai_game.screen
         self.screen_rect = ai_game.screen.get_rect()
 
@@ -27,12 +28,16 @@ class Ship2(Sprite):
         self.theta = 0
         self.omega = 0
         self.theta_rads = 0
+
+        self.health = 3
     def move_location(self, location):
         self.rect.center = location
 
     def change_speed(self, delta = 1):
         self.omega = 0
         self.speed += delta
+        if self.speed > 5:
+            self.speed = 5
     def change_omega(self, delta = 1):
         self.speed = 0
         self.omega += delta
@@ -40,7 +45,7 @@ class Ship2(Sprite):
         return CannonBall2(self.x, self.y, self.theta)
 
 
-    def update(self,island_group):
+    def update(self,island_group,cannonballs1, ship_group2):
         """Update the ship's position based on movement flag."""
         self.theta_rads = math.pi/180*self.theta
         new_y= self.y + self.speed * math.cos(self.theta_rads)
@@ -52,6 +57,17 @@ class Ship2(Sprite):
             self.x = new_x
         else:
             self.rect = old_rect
+        self.check_death2(cannonballs1, ship_group2)
+    def check_death2(self, cannonballs1, ship_group2):
+        collisions = pygame.sprite.groupcollide(cannonballs1, ship_group2, False, True)
+        if collisions:
+            for collision in collisions:
+                self.health -= 1
+                if self.health == 2:
+                    self.image = pygame.image.load('images/Ships/ship (17).png')
+                if self.health == 1:
+                    self.image = pygame.image.load('images/Ships/ship (23).png')
+
 
 
     def blitme(self,screen):
