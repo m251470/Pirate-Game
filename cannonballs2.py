@@ -21,6 +21,6 @@ class CannonBall2(Sprite):
         """Move bullet up the screen"""
         self.y += self.speed * math.cos(self.theta_rads())
         self.x += self.speed * math.sin(self.theta_rads())
-        self.rect.midleft = (int(self.x),int(self.y))
+        self.rect.center = (int(self.x),int(self.y))
     def theta_rads(self):
         return math.pi/180 * self.theta

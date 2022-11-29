@@ -7,41 +7,19 @@ from Arrowspirateship import Ship2
 from cannonballs1 import CannonBall1
 from cannonballs2 import CannonBall2
 from island1 import Island
+from powerup import Powerup
 from time import sleep
+from random import randint, choice
 
-#Grid
+#Grid size
 tile_size = 64
 window_width = 18 * tile_size
 window_height = 12 * tile_size
-#Load in all images
+#Load in water image
 water = pygame.image.load("images/rpgTile029.png")
-TopLeftIslandCorner1  = pygame.image.load("images/island1/tile_01.png")
-CenterTopIsland1 = pygame.image.load("images/island1/tile_02.png")
-TopRightIslandCorner1 = pygame.image.load("images/island1/tile_03.png")
-MiddleLeftIsland1 = pygame.image.load("images/island1/tile_17.png")
-MiddleMiddleIsland1 = pygame.image.load("images/island1/tile_18.png")
-MiddleRightIsland1 = pygame.image.load("images/island1/tile_19.png")
-BottomLeftCornerIsland1 = pygame.image.load("images/island1/tile_33.png")
-BottomCenterIsland1 = pygame.image.load("images/island1/tile_34.png")
-BottomRightCornerIsland1 = pygame.image.load("images/island1/tile_35.png")
-TopLeftIslandCorner2 = pygame.image.load("images/island2/tile_06.png")
-Center1TopIsland2 = pygame.image.load("images/island2/tile_07.png")
-Center2TopIsland2 = pygame.image.load("images/island2/tile_08.png")
-TopRightIslandCorner2 = pygame.image.load("images/island2/tile_09.png")
-TMiddleLeftIsland2 = pygame.image.load("images/island2/tile_22.png")
-TMiddleMiddleIsland2 = pygame.image.load("images/island2/tile_23.png")
-TMiddleMiddle2Island2 = pygame.image.load("images/island2/tile_24.png")
-TMiddleRightIsland2 = pygame.image.load("images/island2/tile_25.png")
-BMiddleLeftIsland2 = pygame.image.load("images/island2/tile_38.png")
-BMiddleMiddleIsland2 = pygame.image.load("images/island2/tile_39.png")
-BMiddleMiddle2Island2 = pygame.image.load("images/island2/tile_40.png")
-BMiddleRightIsland2 = pygame.image.load("images/island2/tile_41.png")
-BottomLeftCornerIsland2 = pygame.image.load("images/island2/tile_54.png")
-BottomCenterIsland2 = pygame.image.load("images/island2/tile_55.png")
-Bottom2CenterIsland2 = pygame.image.load("images/island2/tile_56.png")
-BottomRightCornerIsland2 = pygame.image.load("images/island2/tile_57.png")
-#Assign number values to images
-background = [water, TopLeftIslandCorner1, CenterTopIsland1, TopRightIslandCorner1, MiddleLeftIsland1, MiddleMiddleIsland1, MiddleRightIsland1, BottomLeftCornerIsland1, BottomCenterIsland1, BottomRightCornerIsland1, TopLeftIslandCorner2, Center1TopIsland2, Center2TopIsland2, TopRightIslandCorner2, TMiddleLeftIsland2, TMiddleMiddleIsland2, TMiddleMiddle2Island2, TMiddleRightIsland2, BMiddleLeftIsland2, BMiddleMiddleIsland2, BMiddleMiddle2Island2, BMiddleRightIsland2, BottomLeftCornerIsland2, BottomCenterIsland2, Bottom2CenterIsland2, BottomRightCornerIsland2]
+
+#Add iamge to list to assign number value
+background = [water]
 tile_rect = water.get_rect()
 
 
@@ -63,6 +41,7 @@ class PirateGame:
         self.cannonballs1 = pygame.sprite.Group()
         self.cannonballs2 = pygame.sprite.Group()
         self.islands = pygame.sprite.Group()
+        self.powerups = pygame.sprite.Group()
         self.clock = pygame.time.Clock()
 
 
@@ -105,6 +84,7 @@ class PirateGame:
             self.cannonballs2.add(self.ship2.shoot())
         elif event.key == pygame.K_SPACE:
             self.island_create()
+            self.create_powerup()
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
 
@@ -127,34 +107,41 @@ class PirateGame:
                 island = Island((x, y), 'vertical')
                 # add the wall to our sprite group
                 self.islands.add(island)
-        Misland = Island((300,250))
-        Bisland = Island((800, 500))
-        self.islands.add(Bisland)
-        self.islands.add(Misland)
+        Middleisland = Island((300,250))
+        Bottomisland = Island((800, 500))
+        self.islands.add(Bottomisland)
+        self.islands.add(Middleisland)
 
 
-
-    def _check_cannonball_ship_collisions(self):
-        #Check for cannonballs that hit ships and get rid of cannonballs and change ship if so
-        collisions1 = pygame.sprite.groupcollide(self.cannonballs1, self.ship2, True, True)
-        collisions2 = pygame.sprite.groupcollide(self.cannonballs2, self.ship1, True, True)
-
-        if not self.ship2:
-            self.cannonballs1.empty()
-        elif not self.ship1:
-            self.cannonballs2.empty()
+    def random_position(self):
+        """Creating Random Position for Powerup"""
+        x_loc = randint(100, window_width - 100)
+        y_loc = randint(100, window_height - 100)
+        return (x_loc, y_loc)
+    def create_powerup(self, num_powers=1):
+        current_num = len(self.powerups.sprites())
+        for i in range(current_num, num_powers):
+            new_powerup = Powerup(*self.random_position())
+            if not pygame.sprite.spritecollideany(new_powerup, self.islands):
+                self.powerups.add(new_powerup)
 
     def update_screen(self):
         self.screen.blit(self.bg, self.bg.get_rect())
-        self.ship1.update(self.islands, self.cannonballs2, self.ship_group1)
-        self.ship2.update(self.islands, self.cannonballs1, self.ship_group2)
-        pygame.sprite.Group.draw(self.islands, self.screen)
-        self.ship2.blitme(self.screen)
-        self.ship1.blitme(self.screen)
+        self.islands.draw(self.screen)
+        self.ship_group1.draw(self.screen)
+        self.ship_group2.draw(self.screen)
+        self.cannonballs1.draw(self.screen)
+        self.cannonballs2.draw(self.screen)
+        self.powerups.draw(self.screen)
+        self.islands.update()
         self.cannonballs1.update()
         self.cannonballs2.update()
-        pygame.sprite.Group.draw(self.cannonballs1,self.screen)
-        pygame.sprite.Group.draw(self.cannonballs2, self.screen)
+        self.ship_group1.update(self.islands, self.cannonballs2, self.ship_group1)
+        self.ship_group2.update(self.islands, self.cannonballs1, self.ship_group2)
+        self.powerups.update()
+
+
+
 
         # make the most recently drawn screen visible
         pygame.display.flip()
