@@ -75,7 +75,7 @@ class PirateGame:
         elif event.key == pygame.K_a:
             self.ship1.change_omega(-.1)
         elif event.key == pygame.K_w:
-            self.ship1.change_speed(-.4)
+            self.ship1.change_speed(-1)
         elif event.key == pygame.K_s:
             self.ship1.change_speed(.4)
         elif event.key == pygame.K_q:
@@ -145,7 +145,7 @@ class PirateGame:
 
         # make the most recently drawn screen visible
         pygame.display.flip()
-        self.clock.tick(1000)
+        self.clock.tick(2000)
 
 if __name__ == '__main__':
     # run game

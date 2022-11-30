@@ -3,7 +3,7 @@ from pygame.sprite import Sprite
 import math
 
 class Powerup(Sprite):
-    def __init__(self,x,y,theta,):
+    def __init__(self,x,y,):
         Sprite.__init__(self)
         self.image = pygame.image.load('images/element_red_diamond_glossy.png')
 
