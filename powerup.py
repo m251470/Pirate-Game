@@ -3,7 +3,7 @@ from pygame.sprite import Sprite
 import math
 
 class Powerup(Sprite):
-    def __init__(self,x,y,):
+    def __init__(self,x,y):
         Sprite.__init__(self)
         self.image = pygame.image.load('images/element_red_diamond_glossy.png')
 
@@ -16,5 +16,6 @@ class Powerup(Sprite):
         self.x = x
 
     def update(self):
+        """Move bullet up the screen"""
         self.rect.center = (int(self.x),int(self.y))
 

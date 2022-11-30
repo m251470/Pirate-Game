@@ -75,7 +75,7 @@ class PirateGame:
         elif event.key == pygame.K_a:
             self.ship1.change_omega(-.1)
         elif event.key == pygame.K_w:
-            self.ship1.change_speed(-1)
+            self.ship1.change_speed(-.4)
         elif event.key == pygame.K_s:
             self.ship1.change_speed(.4)
         elif event.key == pygame.K_q:
@@ -136,9 +136,10 @@ class PirateGame:
         self.islands.update()
         self.cannonballs1.update()
         self.cannonballs2.update()
-        self.ship_group1.update(self.islands, self.cannonballs2, self.ship_group1)
-        self.ship_group2.update(self.islands, self.cannonballs1, self.ship_group2)
+        self.ship_group1.update(self.islands, self.powerups, self.cannonballs2, self.ship_group1)
+        self.ship_group2.update(self.islands, self.powerups, self.cannonballs1, self.ship_group2)
         self.powerups.update()
+
 
 
 

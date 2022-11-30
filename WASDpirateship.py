@@ -11,6 +11,9 @@ class Ship1(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.screen = ai_game.screen
         self.screen_rect = ai_game.screen.get_rect()
+        self.original = pygame.image.load('images/Ships/ship (3).png')
+        self.original = pygame.transform.scale(self.original, (64, 64))
+        self.image = self.original
         self.health = 3
         #Pirate ship 1 image
         if self.health == 3:
@@ -41,23 +44,35 @@ class Ship1(pygame.sprite.Sprite):
     def change_omega(self, delta = 1):
         self.speed = 0
         self.omega += delta
+
     def shoot(self):
         return CannonBall1(self.x, self.y, self.theta)
 
-    def update(self, islands, cannonballs2, ship_group1):
+    def update(self, islands, powerups, cannonballs2, ship_group1):
         """Update the ship's position based on movement flag."""
-        self.theta_rads = math.pi/180*self.theta
-        self.y + self.speed * math.cos(self.theta_rads)
-        self.x + self.speed * math.sin(self.theta_rads)
+        self.theta_rads = math.pi / 180 * self.theta
+        new_y = self.y + self.speed * math.cos(self.theta_rads)
+        new_x = self.x + self.speed * math.sin(self.theta_rads)
+        old_rect = self.rect
+        self.rect.center = (new_x, new_y)
         self.theta -= self.omega
+        if (not pygame.sprite.spritecollide(self, islands, False)):
+            self.y = new_y
+            self.x = new_x
+        else:
+            self.rect = old_rect
 
         intX = int(self.x)
         inty = int(self.y)
         self.rect.center = (intX, inty)
-        rotation = pygame.transform.rotate(self.image, self.theta)
+        rotation = pygame.transform.rotate(self.original, self.theta)
         rot = rotation.get_rect(center=self.rect.center)
-        self.screen.blit(rotation, rot)
+        self.image = rotation
+        self.rect = rot
+
+
         self.check_death1(cannonballs2, ship_group1)
+        self.check_powerup(powerups, ship_group1)
     def check_death1(self, cannonballs2, ship_group1):
         collisions = pygame.sprite.groupcollide(cannonballs2, ship_group1, True, False)
         if collisions:
@@ -76,7 +91,16 @@ class Ship1(pygame.sprite.Sprite):
         elif self.health == 0:
             print("Ship is dying")
             self.kill()
+    def check_powerup(self, powerups, ship_group1):
+        healthup = pygame.sprite.groupcollide(powerups, ship_group1, True, False)
+        if healthup:
+            self.health +=1
+    def island_death(self, islands, ship_group1):
+        death = pygame.sprite.groupcollide(islands, ship_group1, False, False)
+        if death:
+            self.healh -=2
 
-    def draw(self,screen):
-        screen.blit(self.image, self.rect)
+
+
+
 
