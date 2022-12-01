@@ -15,12 +15,15 @@ class CannonBall2(Sprite):
         #Store the bullet's position as a decimal value
         self.y = y
         self.x = x
-        self.speed = -1
+        self.speed = -2
         self.theta = theta
-    def update(self):
+    def update(self, islands, cannonballs1):
         """Move bullet up the screen"""
         self.y += self.speed * math.cos(self.theta_rads())
         self.x += self.speed * math.sin(self.theta_rads())
         self.rect.center = (int(self.x),int(self.y))
+        self.island_cannon(islands, cannonballs1)
     def theta_rads(self):
         return math.pi/180 * self.theta
+    def island_cannon(self, islands, cannonballs2):
+        collisions = pygame.sprite.groupcollide(islands, cannonballs2, False, True)

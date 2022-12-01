@@ -14,12 +14,10 @@ class Ship1(pygame.sprite.Sprite):
         self.original = pygame.image.load('images/Ships/ship (3).png')
         self.original = pygame.transform.scale(self.original, (64, 64))
         self.image = self.original
+        self.rect = self.image.get_rect()
         self.health = 3
         #Pirate ship 1 image
-        if self.health == 3:
-            self.image = pygame.image.load('images/Ships/ship (3).png')
-            self.image = pygame.transform.scale(self.image,(64,64))
-            self.rect = self.image.get_rect()
+
 
         #Store values for ship's position
         self.x = 100
@@ -61,7 +59,9 @@ class Ship1(pygame.sprite.Sprite):
             self.x = new_x
         else:
             self.rect = old_rect
-
+        self.check_death1(cannonballs2, ship_group1)
+        self.check_powerup(powerups, ship_group1)
+        self.island_death(islands, ship_group1)
         intX = int(self.x)
         inty = int(self.y)
         self.rect.center = (intX, inty)
@@ -69,36 +69,81 @@ class Ship1(pygame.sprite.Sprite):
         rot = rotation.get_rect(center=self.rect.center)
         self.image = rotation
         self.rect = rot
+        if self.health >= 3:
+            self.health == 3
 
 
-        self.check_death1(cannonballs2, ship_group1)
-        self.check_powerup(powerups, ship_group1)
     def check_death1(self, cannonballs2, ship_group1):
         collisions = pygame.sprite.groupcollide(cannonballs2, ship_group1, True, False)
         if collisions:
             self.health -= 1
             print(f"health: {self.health}")
         if self.health == 2:
-            self.image = pygame.image.load('images/Ships/ship (15).png')
-            self.image = pygame.transform.scale(self.image, (64, 64))
+            self.original = pygame.image.load('images/Ships/ship (15).png')
+            self.original = pygame.transform.scale(self.original, (64, 64))
+            self.image = self.original
             self.rect = self.image.get_rect()
             self.rect.center = (int(self.x), int(self.y))
         elif self.health == 1:
-            self.image = pygame.image.load('images/Ships/ship (21).png')
-            self.image = pygame.transform.scale(self.image, (64, 64))
+            self.original = pygame.image.load('images/Ships/ship (21).png')
+            self.original = pygame.transform.scale(self.original, (64, 64))
+            self.image = self.original
             self.rect = self.image.get_rect()
             self.rect.center = (int(self.x), int(self.y))
         elif self.health == 0:
             print("Ship is dying")
             self.kill()
+
     def check_powerup(self, powerups, ship_group1):
         healthup = pygame.sprite.groupcollide(powerups, ship_group1, True, False)
         if healthup:
             self.health +=1
+        if self.health == 3:
+            self.original = pygame.image.load('images/Ships/ship (3).png')
+            self.original = pygame.transform.scale(self.original, (64, 64))
+            self.image = self.original
+            self.rect = self.image.get_rect()
+            self.rect.center = (int(self.x), int(self.y))
+        if self.health == 2:
+            self.original = pygame.image.load('images/Ships/ship (15).png')
+            self.original = pygame.transform.scale(self.original, (64, 64))
+            self.image = self.original
+            self.rect = self.image.get_rect()
+            self.rect.center = (int(self.x), int(self.y))
+        elif self.health == 1:
+            self.original = pygame.image.load('images/Ships/ship (21).png')
+            self.original = pygame.transform.scale(self.original, (64, 64))
+            self.image = self.original
+            self.rect = self.image.get_rect()
+            self.rect.center = (int(self.x), int(self.y))
+        elif self.health == 0:
+            print("Ship is dying")
+            self.kill()
     def island_death(self, islands, ship_group1):
         death = pygame.sprite.groupcollide(islands, ship_group1, False, False)
         if death:
-            self.healh -=2
+            self.health -= 2
+        if self.health == 3:
+            self.original = pygame.image.load('images/Ships/ship (3).png')
+            self.original = pygame.transform.scale(self.original, (64, 64))
+            self.image = self.original
+            self.rect = self.image.get_rect()
+            self.rect.center = (int(self.x), int(self.y))
+        if self.health == 2:
+            self.original = pygame.image.load('images/Ships/ship (15).png')
+            self.original = pygame.transform.scale(self.original, (64, 64))
+            self.image = self.original
+            self.rect = self.image.get_rect()
+            self.rect.center = (int(self.x), int(self.y))
+        elif self.health == 1:
+            self.original = pygame.image.load('images/Ships/ship (21).png')
+            self.original = pygame.transform.scale(self.original, (64, 64))
+            self.image = self.original
+            self.rect = self.image.get_rect()
+            self.rect.center = (int(self.x), int(self.y))
+        elif self.health == 0:
+            print("Ship is dying")
+            self.kill()
 
 
 

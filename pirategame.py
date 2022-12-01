@@ -43,11 +43,16 @@ class PirateGame:
         self.islands = pygame.sprite.Group()
         self.powerups = pygame.sprite.Group()
         self.clock = pygame.time.Clock()
+        self.font = pygame.font.SysFont(None, 24)
 
 
     def run_game(self):
         """Main Loop"""
         while True:
+            if not self.ship1.alive():
+                self.end_screen()
+            if not self.ship2.alive():
+                self.end_screen()
             self._check_events()
             self.update_screen()
 
@@ -125,6 +130,49 @@ class PirateGame:
             if not pygame.sprite.spritecollideany(new_powerup, self.islands):
                 self.powerups.add(new_powerup)
 
+    def end_screen(self):
+        '''Ends the game and displays score / reset info'''
+        while True:
+            if not self.ship2.alive():
+                self.screen.fill((200, 100, 100))
+                img = self.font.render(
+                    f"RED SHIP WINS!!! GAME OVER - Click Down To Exit", True, (230, 230, 230))
+                img_rect = img.get_rect()
+                img_rect.center = self.screen.get_rect().center
+                self.screen.blit(img, img_rect)
+                img_rect = img.get_rect()
+                img_rect.midbottom = self.screen.get_rect().midbottom
+                # draw text on screen
+                self.screen.blit(img, img_rect)
+                pygame.display.flip()
+                self.clock.tick()
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        sys.exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            sys.exit()
+            elif not self.ship2.alive():
+                self.screen.fill((200, 100, 100))
+                img = self.font.render(
+                    f"BLUE SHIP WINS!! GAME OVER - Click Down TO Exit", True, (230, 230, 230))
+                img_rect = img.get_rect()
+                img_rect.center = self.screen.get_rect().center
+                self.screen.blit(img, img_rect)
+                img_rect = img.get_rect()
+                img_rect.midbottom = self.screen.get_rect().midbottom
+                # draw text on screen
+                self.screen.blit(img, img_rect)
+                pygame.display.flip()
+                self.clock.tick()
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        sys.exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            sys.exit()
+
+
     def update_screen(self):
         self.screen.blit(self.bg, self.bg.get_rect())
         self.islands.draw(self.screen)
@@ -134,8 +182,8 @@ class PirateGame:
         self.cannonballs2.draw(self.screen)
         self.powerups.draw(self.screen)
         self.islands.update()
-        self.cannonballs1.update()
-        self.cannonballs2.update()
+        self.cannonballs1.update(self.islands, self.cannonballs1)
+        self.cannonballs2.update(self.islands, self.cannonballs2)
         self.ship_group1.update(self.islands, self.powerups, self.cannonballs2, self.ship_group1)
         self.ship_group2.update(self.islands, self.powerups, self.cannonballs1, self.ship_group2)
         self.powerups.update()
