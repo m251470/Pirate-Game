@@ -1,6 +1,7 @@
 import pygame
 import math
 from cannonballs1 import CannonBall1
+from pygame import mixer
 from island1 import Island
 from powerup import Powerup
 
@@ -9,6 +10,8 @@ from powerup import Powerup
 class Ship1(pygame.sprite.Sprite):
     def __init__(self, ai_game):
         pygame.sprite.Sprite.__init__(self)
+        mixer.init()
+        mixer.music.load('images/explosion.mp3')
         self.screen = ai_game.screen
         self.screen_rect = ai_game.screen.get_rect()
         self.original = pygame.image.load('images/Ships/ship (3).png')
@@ -76,6 +79,7 @@ class Ship1(pygame.sprite.Sprite):
     def check_death1(self, cannonballs2, ship_group1):
         collisions = pygame.sprite.groupcollide(cannonballs2, ship_group1, True, False)
         if collisions:
+            mixer.music.play()
             self.health -= 1
             print(f"health: {self.health}")
         if self.health == 2:

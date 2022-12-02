@@ -1,5 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
+from pygame import mixer
 import math
 from cannonballs2 import CannonBall2
 
@@ -9,6 +10,8 @@ class Ship2(Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.screen = ai_game.screen
         self.screen_rect = ai_game.screen.get_rect()
+        mixer.init()
+        mixer.music.load('images/explosion.mp3')
         self.original = pygame.image.load('images/Ships/ship (5).png')
         self.original = pygame.transform.scale(self.original, (64, 64))
         self.image = self.original
@@ -82,6 +85,7 @@ class Ship2(Sprite):
         if collisions:
             self.health -= 1
             print(f"health: {self.health}")
+            mixer.music.play()
         if self.health == 2:
             self.original = pygame.image.load('images/Ships/ship (17).png')
             self.original = pygame.transform.scale(self.original, (64, 64))
