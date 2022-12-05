@@ -71,13 +71,14 @@ class Ship1(pygame.sprite.Sprite):
         self.rect.center = (new_x, new_y)
         self.theta -= self.omega
         if (not pygame.sprite.spritecollide(self, islands, False)):
+            # If ship does not collide with islands nothing happens
             self.y = new_y
             self.x = new_x
         else:
-            # go back to the old rectangle
+            # go back to the old position
             self.rect = old_rect
-            # WALLS ARE HARD, if you collide with wall you are dead.
-            self.health -=3
+            # WALLS ARE HARD IF YOU COLLIDE WITH WALL YOU DIE
+            self.health -= 3
             if self.health <= 0:
                 self.health == 0
         #Check for death by collisions
