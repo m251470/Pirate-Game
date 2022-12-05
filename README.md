@@ -15,6 +15,6 @@ Pirate ship 1: This pirate ship is controlled by WASD keys. "W, S" control forwa
 Pirate ship 2: This pirate ship is controlled by Arrow keys. "UP, DOWN" arrows control forward and backward movement, and "LEFT, RIGHT" control which way the ship rotates. "SHIFT" is used to fire cannon.
 When a ship wins, click on the mouse to exit the game.
 
-Use the spacebar to start the game when it loads.
+PRESS THE SPACEBAR WHEN THE GAME LOADS TO START GAME!!!
 
 If you want more powerups to spawn use the spacebar!
