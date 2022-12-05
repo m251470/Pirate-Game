@@ -64,14 +64,22 @@ class Ship1(pygame.sprite.Sprite):
         #Equation for degrees to radians
         self.theta_rads = math.pi / 180 * self.theta
         #Equations for movement
+        #TRICKY TRIG
         new_y = self.y + self.speed * math.cos(self.theta_rads)
         new_x = self.x + self.speed * math.sin(self.theta_rads)
         old_rect = self.rect
         self.rect.center = (new_x, new_y)
         self.theta -= self.omega
-        self.y = new_y
-        self.x = new_x
-        self.rect = old_rect
+        if (not pygame.sprite.spritecollide(self, islands, False)):
+            self.y = new_y
+            self.x = new_x
+        else:
+            # go back to the old rectangle
+            self.rect = old_rect
+            # WALLS ARE HARD, if you collide with wall you are dead.
+            self.health -=3
+            if self.health <= 0:
+                self.health == 0
         #Check for death by collisions
         self.check_death1(cannonballs2, ship_group1)
         self.check_powerup(powerups, ship_group1)
@@ -89,17 +97,20 @@ class Ship1(pygame.sprite.Sprite):
         #Set limit to health of ship
         if self.health >= 3:
             self.health == 3
+        if self.health <=0:
+            self.health ==0
 
 
     def check_death1(self, cannonballs2, ship_group1):
         #Fucntion to collision
+        # LOOKING WEAK, health changing by showing different images with damage.
         collisions = pygame.sprite.groupcollide(cannonballs2, ship_group1, True, False)
         if collisions:
             #Play music if collision
             mixer.music.play()
             #If Collision subtract from health
             self.health -= 1
-            print(f"health: {self.health}")
+
         if self.health == 2:
             #Change image if hit
             self.original = pygame.image.load('images/Ships/ship (15).png')
@@ -115,16 +126,18 @@ class Ship1(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.rect.center = (int(self.x), int(self.y))
         elif self.health == 0:
-            # Kill Ship
+            #Kill Ship
             print("Ship is dying")
             self.kill()
 
     def check_powerup(self, powerups, ship_group1):
         """Function for powerup"""
+        #HEALTHY EATER, images change depending on health
         healthup = pygame.sprite.groupcollide(powerups, ship_group1, True, False)
         if healthup:
             #If collision add to health
             self.health +=1
+
         if self.health == 3:
             # Change image
             self.original = pygame.image.load('images/Ships/ship (3).png')
@@ -151,10 +164,12 @@ class Ship1(pygame.sprite.Sprite):
             self.kill()
     def island_death(self, islands, ship_group1):
         """Function for ship collision"""
+        # WALLS ARE HARD, if you collide with wall you are dead.
         death = pygame.sprite.groupcollide(islands, ship_group1, False, False)
         if death:
             #If island collision subtract 2 from health
-            self.health -= 2
+            self.health -= 3
+            print(self.health)
         if self.health == 3:
             # Change image if hit
             self.original = pygame.image.load('images/Ships/ship (3).png')

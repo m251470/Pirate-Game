@@ -12,6 +12,7 @@ from time import sleep
 from random import randint, choice
 
 #Grid size
+#Using sprites to create a background
 tile_size = 64
 #Get the window width
 window_width = 18 * tile_size
@@ -38,6 +39,7 @@ class PirateGame:
         self.ship1 = Ship1(self)
         self.ship2 = Ship2(self)
         #Set ships as sprites
+        #Multiplier feature
         self.ship_group1 = pygame.sprite.Group()
         self.ship_group2 = pygame.sprite.Group()
         #Put ships into sprite groups
@@ -82,7 +84,7 @@ class PirateGame:
                 self._check_keydown_events(event)
 
     def _check_keydown_events(self, event):
-        #Keyboard events to control ship
+        #Keyboard events to control 2 ships for multiplayer
         #Keyboard events for rotating
         if event.key == pygame.K_RIGHT:
             self.ship2.change_omega(.1)
@@ -102,6 +104,7 @@ class PirateGame:
         elif event.key == pygame.K_s:
             self.ship1.change_speed(.4)
         #Keybaord events for cannons
+        #SHOOTER
         elif event.key == pygame.K_q:
             self.cannonballs1.add(self.ship1.shoot())
         elif event.key == pygame.K_RSHIFT:
@@ -115,7 +118,7 @@ class PirateGame:
             sys.exit()
 
     def draw_background(self, bg_size):
-        #Draw the surface
+        #Draw the surface with spirtes
         self.bg = pygame.Surface(bg_size)
         #for every part in the grid blit the background in the screen
         for r, gridlist in enumerate(grid):
@@ -170,6 +173,7 @@ class PirateGame:
                 self.screen.fill((200, 100, 100))
                 #Use special font
                 #Kam Summers helped me use the special font
+                #FANCY FONT
                 final_screen_font = pygame.font.Font("images/Bruce-Forever.ttf", 26)
                 #Font on screen
                 final_screen_text = final_screen_font.render(
@@ -187,6 +191,7 @@ class PirateGame:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         sys.exit()
+                        #MOUSE EVENT
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if event.type == pygame.MOUSEBUTTONDOWN:
                             sys.exit()
@@ -195,6 +200,7 @@ class PirateGame:
                 #Blue Background
                 self.screen.fill((35, 60, 186))
                 #Kam Summers helped me with special font
+                # FANCY FONT
                 final_screen_font = pygame.font.Font("images/Bruce-Forever.ttf", 26)
                 final_screen_text = final_screen_font.render(
                     f"BLUE SHIP WINS!! GAME OVER - Click Down TO Exit", False, (230, 230, 230))
@@ -211,6 +217,7 @@ class PirateGame:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         sys.exit()
+                        # MOUSE EVENT
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if event.type == pygame.MOUSEBUTTONDOWN:
                             sys.exit()

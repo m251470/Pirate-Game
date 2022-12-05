@@ -23,7 +23,7 @@ class CannonBall2(Sprite):
         self.theta = theta
     def update(self, islands, cannonballs1):
         """Update cannonball's position"""
-        #fucntions for cannonballs position
+        #Functions for cannonballs position
         self.y += self.speed * math.cos(self.theta_rads())
         self.x += self.speed * math.sin(self.theta_rads())
         self.rect.center = (int(self.x),int(self.y))
