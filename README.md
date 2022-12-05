@@ -2,7 +2,7 @@ DJ's Pirate-Game
 
 This is my EW000 final project game.
 ![Game Screenshot](images/GameScreenshot.png)
-In this head to head battle between 2 pirateships and your friend.
+In this head to head battle between you and your friend, two pirate ships will fight to the death.
 
 On the left is Pirateship 1, and on the right is Pirateship 2.
 

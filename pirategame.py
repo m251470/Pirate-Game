@@ -227,6 +227,7 @@ class PirateGame:
         self.cannonballs2.draw(self.screen)
         self.powerups.draw(self.screen)
         #Update the sprites
+        #Duncan Ayles helped me with updating my sprites.
         self.islands.update()
         self.cannonballs1.update(self.islands, self.cannonballs1)
         self.cannonballs2.update(self.islands, self.cannonballs2)
