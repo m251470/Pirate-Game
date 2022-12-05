@@ -1,8 +1,8 @@
 DJ's Pirate-Game
 
 This is my EW000 final project game.
-
-This game involves two pirate ships who are ganist eachother.
+![Game Screenshot](images/GameScreenshot.png)
+In this head to head battle between 2 pirateships and your friend.
 
 On the left is Pirateship 1, and on the right is Pirateship 2.
 
@@ -12,12 +12,12 @@ You can gain health by going over a powerups but be careful, you don't want to r
 If you get hit by a cannonball you only lose 1 health.
 
 Pirateship 1:
-This pirate ship is controlled by WASD keys.
+This pirateship is controlled by WASD keys.
 "W,S" control forward and backward movement, "A,D" control which way the ship rotates.
 "Q" is used to fire cannon.
 
 Pirateship 2:
-This pirate ship is controlled by Arrow keys.
+This pirateship is controlled by Arrow keys.
 "UP, DOWN" arrows control forward and backward movement, "LEfT, RIGHT" control which way the ship rotates.
 "SHIFT" is used to fire cannon.
 
